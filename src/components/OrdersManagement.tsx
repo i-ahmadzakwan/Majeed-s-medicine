@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { API_URL } from '@/lib/config';
 import { 
   Package, 
   Clock, 
@@ -126,7 +127,7 @@ const OrdersManagement = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders');
+      const response = await fetch(`${API_URL}/api/orders`);
       const data = await response.json();
       
       const newPendingOrders = data.filter((order: Order) => order.status === 'pending');
@@ -145,7 +146,7 @@ const OrdersManagement = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders/stats');
+      const response = await fetch(`${API_URL}/api/orders/stats`);
       const data = await response.json();
       setStats(data);
     } catch (error) {
@@ -169,7 +170,7 @@ const OrdersManagement = () => {
 
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const response = await fetch(`${API_URL}/api/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })

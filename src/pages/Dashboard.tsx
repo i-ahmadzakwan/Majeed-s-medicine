@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Pill, LogOut, Shield, ShoppingBag, Package, ClipboardList } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { API_URL } from '@/lib/config';
 
 interface Medicine {
   _id: string;
@@ -35,7 +36,7 @@ const Dashboard = () => {
 
   const fetchMedicines = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/medicines');
+      const response = await fetch(`${API_URL}/api/medicines`);
       const data = await response.json();
       setMedicines(data || []);
       

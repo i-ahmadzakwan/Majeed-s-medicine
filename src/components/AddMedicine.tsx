@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Pill, AlertCircle, Check, Hash, Percent } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 interface AddMedicineProps {
   onMedicineAdded: () => void;
@@ -51,7 +52,7 @@ const AddMedicine = ({ onMedicineAdded }: AddMedicineProps) => {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/medicines', {
+      const response = await fetch(`${API_URL}/api/medicines`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

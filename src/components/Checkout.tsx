@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ShoppingBag, CreditCard, Banknote, Smartphone, Check, AlertCircle } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 interface CartItem {
   _id: string;
@@ -52,7 +53,7 @@ const Checkout = ({ cartItems, totalAmount, onCheckoutComplete }: CheckoutProps)
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+    const response = await fetch(`${API_URL}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { API_URL as BASE_URL } from '@/lib/config';
 
 export interface Medicine {
   _id: string;
@@ -39,7 +40,7 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `${BASE_URL}/api`;
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
