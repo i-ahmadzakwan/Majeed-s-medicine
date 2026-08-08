@@ -5,11 +5,9 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const orderRoutes = require('./routes/orderRoutes');
 
-
 // Import routes
 const medicineRoutes = require('./routes/medicineRoutes');
 const authRoutes = require('./routes/authRoutes');
-// Add this line with other route imports
 const cartRoutes = require('./routes/cartRoutes');
 
 const app = express();
@@ -17,16 +15,30 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware - Updated CORS for production
+// ✅ CORS Configuration - Allow all Vercel domains
 app.use(cors({
-  origin: [
-    'https://majeed-s-medicine.vercel.app',
-    'http://localhost:8080',
-    'http://localhost:5173'
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost and all vercel.app domains
+    if (origin.includes('localhost') || origin.includes('vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all for now
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 }));
+
+// Handle preflight requests
+app.options('*', cors());
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.get('/', (req, res) => {
@@ -35,10 +47,18 @@ app.get('/', (req, res) => {
 
 app.use('/api/medicines', medicineRoutes);
 app.use('/api/auth', authRoutes);
-// Add this line with other route uses
 app.use('/api/cart', cartRoutes);
-// Add with other routes
 app.use('/api/orders', orderRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    success: false, 
+    message: 'Something went wrong!',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
 
 // Port
 const PORT = process.env.PORT || 5000;
