@@ -236,7 +236,7 @@ const Cart = () => {
                               type="number"
                               min="1"
                               max={item.medicine.stock}
-                              value={quantityInputs[item._id] || item.quantity}
+                              value={quantityInputs[item._id] ?? item.quantity}
                               onChange={(e) => handleQuantityInputChange(item._id, item.medicine._id, e.target.value, item.medicine.stock)}
                               onBlur={() => handleQuantityBlur(item._id, item.medicine._id, item.medicine.stock)}
                               onFocus={handleQuantityFocus}
@@ -259,7 +259,7 @@ const Cart = () => {
                             disabled={item.quantity >= item.medicine.stock}
                             className="h-8 w-8 p-0"
                           >
-                            <Plus className="w-4 w-4" />
+                            <Plus className="w-4 h-4" />
                           </Button>
                         </div>
                         <p className="text-xs text-center text-muted-foreground mt-1">
