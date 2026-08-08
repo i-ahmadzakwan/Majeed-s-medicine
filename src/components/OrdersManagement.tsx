@@ -76,9 +76,19 @@ const OrdersManagement = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  
+
   const previousPendingCount = useRef<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const notificationsEnabledRef = useRef<boolean>(false);
+  const soundEnabledRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    notificationsEnabledRef.current = notificationsEnabled;
+  }, [notificationsEnabled]);
+
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
 
   // Initialize notification sound
   useEffect(() => {
@@ -99,13 +109,13 @@ const OrdersManagement = () => {
   }, []);
 
   const playNotificationSound = () => {
-    if (soundEnabled && audioRef.current) {
+    if (soundEnabledRef.current && audioRef.current) {
       audioRef.current.play().catch(err => console.log('Audio play failed:', err));
     }
   };
 
   const showBrowserNotification = (order: Order) => {
-    if (notificationsEnabled && 'Notification' in window) {
+    if (notificationsEnabledRef.current && 'Notification' in window) {
       const notification = new Notification('🔔 New Order Received!', {
         body: `Order ${order.orderNumber} from ${order.customerName}\nAmount: Rs. ${order.totalAmount.toLocaleString()}`,
         icon: '/favicon.ico',
